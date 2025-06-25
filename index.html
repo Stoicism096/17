@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老年认知训练 - 颜色干扰游戏</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f8f4e9, #e8f5e9);
+            color: #4a4a4a;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* 导航栏样式 */
+        .navbar {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 16px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            color: #5a7247;
+            font-size: 32px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5a7247;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+            color: #5a7247;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: #8db596;
+        }
+        
+        .points-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #8db596, #7aa384);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 进度卡片样式 */
+        .progress-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e8d9b5;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .progress-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #5a7247;
+        }
+        
+        .level-badge {
+            background: linear-gradient(135deg, #8db596, #7aa384);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 16px;
+            background-color: #e8d9b5;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8db596, #7aa384);
+            border-radius: 8px;
+            width: 45%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+        }
+        
+        .completed-text {
+            color: #5a7247;
+            font-weight: 500;
+        }
+        
+        .reward-text {
+            color: #7aa384;
+            font-weight: 500;
+        }
+        
+        /* 游戏卡片样式 */
+        .game-card {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e8d9b5;
+            transition: all 0.3s ease;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #8db596, #7aa384);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 36px;
+            margin: 0 auto 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #5a7247;
+            margin-bottom: 16px;
+        }
+        
+        .game-description {
+            font-size: 20px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+        
+        .game-image {
+            width: 100%;
+            height: 220px;
+            border-radius: 16px;
+            object-fit: cover;
+            border: 3px solid #e8d9b5;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, #8db596, #7aa384);
+            color: white;
+            border: none;
+            padding: 16px 40px;
+            font-size: 22px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 游戏区域样式 */
+        .game-area {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e8d9b5;
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .game-title-area {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5a7247;
+        }
+        
+        .game-stats {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0f7f2;
+            color: #5a7247;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        /* 颜色干扰游戏特定样式 */
+        .color-game-container {
+            background: linear-gradient(135deg, #f0f7f2, #e0efe5);
+            border: 3px solid #8db596;
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .instruction-text {
+            font-size: 22px;
+            color: #5a7247;
+            margin-bottom: 30px;
+            text-align: center;
+            max-width: 90%;
+        }
+        
+        .color-word {
+            font-size: 72px;
+            font-weight: bold;
+            margin: 30px 0;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 40px;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .color-option {
+            padding: 25px;
+            border-radius: 16px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+        }
+        
+        .color-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+        
+        .color-option.selected {
+            border: 3px solid #5a7247;
+            box-shadow: 0 0 0 4px rgba(90, 114, 71, 0.3);
+        }
+        
+        .red-option { background-color: #ff6b6b; color: white; }
+        .blue-option { background-color: #4d96ff; color: white; }
+        .green-option { background-color: #6bcb77; color: white; }
+        .yellow-option { background-color: #ffd93d; color: #4a4a4a; }
+        
+        .feedback {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 16px;
+            margin: 25px 0;
+            display: none;
+            width: 100%;
+            max-width: 600px;
+        }
+        
+        .correct-feedback {
+            background-color: rgba(107, 203, 119, 0.2);
+            color: #5a7247;
+            border: 3px solid #6bcb77;
+            animation: pulse 0.5s ease;
+        }
+        
+        .incorrect-feedback {
+            background-color: rgba(255, 107, 107, 0.2);
+            color: #e74c3c;
+            border: 3px solid #ff6b6b;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .progress-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #e8d9b5;
+        }
+        
+        .progress-dot.active {
+            background-color: #8db596;
+        }
+        
+        .progress-dot.correct {
+            background-color: #6bcb77;
+        }
+        
+        .progress-dot.incorrect {
+            background-color: #ff6b6b;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, #8db596, #7aa384);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            font-size: 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .control-btn.exit {
+            background: linear-gradient(135deg, #a0a0a0, #808080);
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 结果弹窗样式 */
+        .result-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .result-content {
+            background: white;
+            border-radius: 24px;
+            padding: 50px 40px;
+            text-align: center;
+            max-width: 90%;
+            width: 500px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .trophy-icon {
+            font-size: 80px;
+            color: gold;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: bounce 1s infinite alternate;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+        
+        .result-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #5a7247;
+            margin-bottom: 16px;
+        }
+        
+        .result-text {
+            font-size: 24px;
+            color: #7aa384;
+            margin-bottom: 32px;
+        }
+        
+        .score-display {
+            font-size: 28px;
+            color: #5a7247;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .score-value {
+            color: #e6b800;
+            font-size: 36px;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .stat-box {
+            background: #f0f7f2;
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 140px;
+        }
+        
+        .stat-title {
+            font-size: 20px;
+            color: #7aa384;
+            margin-bottom: 10px;
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #5a7247;
+        }
+        
+        .reward-box {
+            background: #fcf8e8;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 32px;
+        }
+        
+        .coins-icon {
+            font-size: 48px;
+            color: #e6b800;
+            margin-bottom: 12px;
+        }
+        
+        .reward-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #5a7247;
+        }
+        
+        .reward-amount {
+            color: #e6b800;
+            font-size: 32px;
+        }
+        
+        .result-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .game-header {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-stats {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .color-word {
+                font-size: 56px;
+            }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .game-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .result-buttons {
+                flex-direction: column;
+            }
+            
+            .control-btn, .start-btn {
+                width: 100%;
+                padding: 16px;
+            }
+            
+            .color-word {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 导航栏 -->
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-brain logo-icon"></i>
+                <div class="logo-text">老年认知训练中心</div>
+            </div>
+            <div class="user-info">
+                <div class="welcome-text">欢迎, <span class="user-name">张爷爷</span></div>
+                <div class="points-badge">
+                    <i class="fas fa-star"></i>
+                    <span>125 积分</span>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- 进度卡片 -->
+        <div class="progress-card">
+            <div class="progress-header">
+                <div class="progress-title">您的训练进度</div>
+                <div class="level-badge">第 4 关</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <div class="progress-footer">
+                <div class="completed-text">已完成: 55%</div>
+                <div class="reward-text">下一关奖励: 35积分</div>
+            </div>
+        </div>
+        
+        <!-- 游戏卡片 -->
+        <div class="game-card">
+            <div class="game-icon">
+                <i class="fas fa-palette"></i>
+            </div>
+            <h2 class="game-title">颜色干扰游戏</h2>
+            <p class="game-description">
+                根据文字的颜色而不是文字的含义选择正确答案。训练您的注意力控制能力。
+            </p>
+            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                 alt="颜色干扰游戏" class="game-image">
+            <button class="start-btn" id="startGameBtn">
+                <i class="fas fa-play"></i> 开始游戏
+            </button>
+        </div>
+        
+        <!-- 游戏区域 -->
+        <div id="gameArea" class="game-area">
+            <div class="game-header">
+                <div class="game-title-area">颜色干扰游戏</div>
+                <div class="game-stats">
+                    <div class="stat-badge">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">0</span>秒
+                    </div>
+                    <div class="stat-badge">
+                        <i class="fas fa-check-circle"></i>
+                        正确: <span id="correct-count">0</span>/10
+                    </div>
+                </div>
+            </div>
+            
+            <div class="color-game-container">
+                <div class="instruction-text">
+                    请选择下方文字<strong>实际显示的颜色</strong>，而不是文字的含义
+                </div>
+                
+                <div class="color-word" id="color-word">红色</div>
+                
+                <div class="options-container">
+                    <div class="color-option red-option" data-color="red">红色</div>
+                    <div class="color-option blue-option" data-color="blue">蓝色</div>
+                    <div class="color-option green-option" data-color="green">绿色</div>
+                    <div class="color-option yellow-option" data-color="yellow">黄色</div>
+                </div>
+                
+                <div class="feedback" id="feedback"></div>
+            </div>
+            
+            <div class="progress-indicator" id="progress-indicator">
+                <!-- 进度指示器将在这里动态生成 -->
+            </div>
+            
+            <div class="game-controls">
+                <button class="control-btn" id="resetGameBtn">
+                    <i class="fas fa-redo"></i> 重新开始
+                </button>
+                <button class="control-btn exit" id="exitGameBtn">
+                    <i class="fas fa-times"></i> 退出游戏
+                </button>
+            </div>
+        </div>
+        
+        <!-- 结果弹窗 -->
+        <div id="resultModal" class="result-modal">
+            <div class="result-content">
+                <div class="trophy-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h2 class="result-title">恭喜完成游戏！</h2>
+                
+                <div class="score-display">
+                    得分: <span class="score-value" id="finalScore">0</span>/10
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-title">用时</div>
+                        <div class="stat-value" id="finalTime">0秒</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-title">正确率</div>
+                        <div class="stat-value" id="accuracy">0%</div>
+                    </div>
+                </div>
+                
+                <div class="reward-box">
+                    <div class="coins-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="reward-text">
+                        获得 <span class="reward-amount">30</span> 积分
+                    </div>
+                </div>
+                
+                <div class="result-buttons">
+                    <button class="control-btn" id="playAgainBtn">
+                        <i class="fas fa-redo"></i> 再玩一次
+                    </button>
+                    <button class="control-btn exit" id="finishGameBtn">
+                        <i class="fas fa-check"></i> 完成
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const gameArea = document.getElementById('gameArea');
+        const colorWord = document.getElementById('color-word');
+        const options = document.querySelectorAll('.color-option');
+        const feedback = document.getElementById('feedback');
+        const timerDisplay = document.getElementById('timer');
+        const correctCountDisplay = document.getElementById('correct-count');
+        const progressIndicator = document.getElementById('progress-indicator');
+        const resultModal = document.getElementById('resultModal');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const finalTimeDisplay = document.getElementById('finalTime');
+        const accuracyDisplay = document.getElementById('accuracy');
+        const startGameBtn = document.getElementById('startGameBtn');
+        const resetGameBtn = document.getElementById('resetGameBtn');
+        const exitGameBtn = document.getElementById('exitGameBtn');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const finishGameBtn = document.getElementById('finishGameBtn');
+        
+        // 游戏数据
+        const colors = ['red', 'blue', 'green', 'yellow'];
+        const colorNames = {
+            'red': '红色',
+            'blue': '蓝色',
+            'green': '绿色',
+            'yellow': '黄色'
+        };
+        
+        // 游戏状态
+        let currentColor = '';
+        let currentText = '';
+        let correctAnswers = 0;
+        let totalQuestions = 0;
+        let gameTimer;
+        let seconds = 0;
+        let gameActive = false;
+        let startTime;
+        
+        // 开始游戏
+        function startGame() {
+            gameArea.style.display = 'block';
+            resetGame();
+        }
+        
+        // 重置游戏
+        function resetGame() {
+            // 重置游戏状态
+            correctAnswers = 0;
+            totalQuestions = 0;
+            seconds = 0;
+            correctCountDisplay.textContent = correctAnswers;
+            timerDisplay.textContent = seconds;
+            feedback.style.display = 'none';
+            
+            // 隐藏结果弹窗
+            resultModal.style.display = 'none';
+            
+            // 创建进度指示器
+            createProgressIndicator();
+            
+            // 开始计时
+            startTime = new Date();
+            startTimer();
+            
+            // 生成第一个问题
+            generateQuestion();
+            
+            // 激活游戏
+            gameActive = true;
+        }
+        
+        // 创建进度指示器
+        function createProgressIndicator() {
+            progressIndicator.innerHTML = '';
+            for (let i = 0; i < 10; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                if (i === 0) dot.classList.add('active');
+                progressIndicator.appendChild(dot);
+            }
+        }
+        
+        // 开始计时器
+        function startTimer() {
+            clearInterval(gameTimer);
+            gameTimer = setInterval(() => {
+                seconds++;
+                timerDisplay.textContent = seconds;
+            }, 1000);
+        }
+        
+        // 生成问题
+        function generateQuestion() {
+            if (totalQuestions >= 10) {
+                endGame();
+                return;
+            }
+            
+            // 随机选择颜色和文本
+            const textColor = colors[Math.floor(Math.random() * colors.length)];
+            let textContent = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 确保文本和颜色不完全匹配
+            while (textContent === textColor && Math.random() > 0.3) {
+                textContent = colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            currentColor = textColor;
+            currentText = colorNames[textContent];
+            
+            // 更新显示
+            colorWord.textContent = currentText;
+            colorWord.style.color = textColor;
+            
+            // 更新进度指示器
+            document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+                dot.classList.remove('active');
+                if (i === totalQuestions) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            // 重置选项状态
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            feedback.style.display = 'none';
+            
+            totalQuestions++;
+        }
+        
+        // 检查答案
+        function checkAnswer(selectedColor) {
+            if (!gameActive) return;
+            
+            // 更新选项状态
+            options.forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.color === selectedColor) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            // 检查答案
+            if (selectedColor === currentColor) {
+                // 回答正确
+                feedback.textContent = '回答正确！';
+                feedback.className = 'feedback correct-feedback';
+                feedback.style.display = 'block';
+                
+                // 更新进度指示器
+                document.querySelectorAll('.progress-dot')[totalQuestions - 1].classList.add('correct');
+                
+                correctAnswers++;
+                correctCountDisplay.textContent = correctAnswers;
+            } else {
+                // 回答错误
+                feedback.textContent = `正确答案是: ${colorNames[currentColor]}`;
+                feedback.className = 'feedback incorrect-feedback';
+                feedback.style.display = 'block';
+                
+                // 更新进度指示器
+                document.querySelectorAll('.progress-dot')[totalQuestions - 1].classList.add('incorrect');
+            }
+            
+            // 1.5秒后生成下一个问题
+            setTimeout(() => {
+                generateQuestion();
+            }, 1500);
+        }
+        
+        // 结束游戏
+        function endGame() {
+            clearInterval(gameTimer);
+            gameActive = false;
+            
+            const endTime = new Date();
+            const timeUsed = Math.floor((endTime - startTime) / 1000);
+            const accuracy = Math.round((correctAnswers / 10) * 100);
+            
+            finalScoreDisplay.textContent = correctAnswers;
+            finalTimeDisplay.textContent = timeUsed;
+            accuracyDisplay.textContent = `${accuracy}%`;
+            
+            setTimeout(() => {
+                resultModal.style.display = 'flex';
+            }, 1000);
+        }
+        
+        // 退出游戏
+        function exitGame() {
+            gameArea.style.display = 'none';
+            resultModal.style.display = 'none';
+            clearInterval(gameTimer);
+            gameActive = false;
+        }
+        
+        // 事件监听器
+        startGameBtn.addEventListener('click', startGame);
+        resetGameBtn.addEventListener('click', resetGame);
+        exitGameBtn.addEventListener('click', exitGame);
+        playAgainBtn.addEventListener('click', resetGame);
+        finishGameBtn.addEventListener('click', exitGame);
+        
+        // 为每个颜色选项添加点击事件
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                if (gameActive) {
+                    checkAnswer(option.dataset.color);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
